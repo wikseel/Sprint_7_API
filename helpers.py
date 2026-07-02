@@ -5,6 +5,16 @@ import requests
 
 from urls import COURIER_URL, COURIER_LOGIN_URL
 
+ORDER_BASE = {
+    "firstName": "Тест",
+    "lastName": "Тестов",
+    "address": "ул. Тверская, 1",
+    "metroStation": 4,
+    "phone": "+79991234567",
+    "rentTime": 3,
+    "deliveryDate": "2024-12-01",
+    "comment": "Тестовый заказ",
+}
 
 def generate_random_string(length=10):
     # Генерирует случайную строку из букв нижнего регистра

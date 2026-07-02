@@ -4,19 +4,7 @@ import pytest
 import requests
 
 from urls import ORDERS_URL
-
-
-ORDER_BASE = {
-    "firstName": "Тест",
-    "lastName": "Тестов",
-    "address": "ул. Тверская, 1",
-    "metroStation": 4,
-    "phone": "+79991234567",
-    "rentTime": 3,
-    "deliveryDate": "2024-12-01",
-    "comment": "Тестовый заказ",
-}
-
+from helpers import ORDER_BASE
 
 @allure.feature("Создание заказа")
 class TestCreateOrder:

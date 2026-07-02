@@ -8,8 +8,8 @@ from helpers import generate_courier_data, register_courier, login_courier, dele
 class TestLoginCourier:
 
     @allure.title("Курьер может авторизоваться - возвращается 200 и id")
-    def test_login_courier_success_returns_200_and_id(self, courier):
-        data, courier_id = courier
+    def test_login_courier_success_returns_200_and_id(self, registered_courier_data):
+        data, response, courier_id = registered_courier_data
         response = login_courier(data["login"], data["password"])
 
         assert response.status_code == 200
@@ -31,16 +31,16 @@ class TestLoginCourier:
         assert "message" in response.json()
 
     @allure.title("Авторизация с неверным логином - возвращается 404")
-    def test_login_courier_wrong_login_returns_404(self, courier):
-        data, courier_id = courier
+    def test_login_courier_wrong_login_returns_404(self, registered_courier_data):
+        data, response, courier_id = registered_courier_data
         response = login_courier("wronglogin_xyz", data["password"])
 
         assert response.status_code == 404
         assert "message" in response.json()
 
     @allure.title("Авторизация с неверным паролем - возвращается 404")
-    def test_login_courier_wrong_password_returns_404(self, courier):
-        data, courier_id = courier
+    def test_login_courier_wrong_password_returns_404(self, registered_courier_data):
+        data, response, courier_id = registered_courier_data
         response = login_courier(data["login"], "wrongpassword_xyz")
 
         assert response.status_code == 404

@@ -4,15 +4,14 @@ from helpers import generate_courier_data, register_courier, login_courier, dele
 
 
 @pytest.fixture
-def courier():
-    # Создаёт курьера перед тестом и удаляет после
+def registered_courier_data():
     data = generate_courier_data()
-    register_courier(data)
+    response = register_courier(data)
 
-    response = login_courier(data["login"], data["password"])
-    courier_id = response.json().get("id")
+    login_response = login_courier(data["login"], data["password"])
+    courier_id = login_response.json().get("id")
 
-    yield data, courier_id
+    yield data, response, courier_id
 
     if courier_id:
         delete_courier(courier_id)

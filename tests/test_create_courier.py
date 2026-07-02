@@ -9,32 +9,16 @@ from urls import COURIER_URL
 class TestCreateCourier:
 
     @allure.title("Курьера можно создать - возвращается 201 и ok:true")
-    def test_create_courier_success_returns_201_and_ok_true(self):
-        data = generate_courier_data()
-        response = register_courier(data)
-
-        # Удаляем после теста
-        login_response = login_courier(data["login"], data["password"])
-        courier_id = login_response.json().get("id")
-        if courier_id:
-            delete_courier(courier_id)
-
+    def test_create_courier_success_returns_201_and_ok_true(self, registered_courier_data):
+        data, response, courier_id = registered_courier_data
         assert response.status_code == 201
         assert response.json() == {"ok": True}
 
     @allure.title("Нельзя создать двух одинаковых курьеров - возвращается 409")
-    def test_create_duplicate_courier_returns_409(self):
-        data = generate_courier_data()
-        register_courier(data)
-        response = register_courier(data)
-
-        # Удаляем после теста
-        login_response = login_courier(data["login"], data["password"])
-        courier_id = login_response.json().get("id")
-        if courier_id:
-            delete_courier(courier_id)
-
-        assert response.status_code == 409
+    def test_create_duplicate_courier_returns_409(self, registered_courier_data):
+        data, response, courier_id = registered_courier_data
+        duplicate_response = register_courier(data)
+        assert duplicate_response.status_code == 409
 
     @allure.title("Нельзя создать курьера с уже существующим логином - возвращается ошибка")
     def test_create_courier_with_existing_login_returns_error(self):
@@ -45,11 +29,6 @@ class TestCreateCourier:
         data2["login"] = data["login"]
         response = register_courier(data2)
 
-        # Удаляем после теста
-        login_response = login_courier(data["login"], data["password"])
-        courier_id = login_response.json().get("id")
-        if courier_id:
-            delete_courier(courier_id)
 
         assert response.status_code == 409
         assert "message" in response.json()
